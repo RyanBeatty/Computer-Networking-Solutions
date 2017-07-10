@@ -6,33 +6,22 @@ import System.Directory
 
 import Lib
 
--- Service incoming requests for files. I'm just trying to get a feel for
--- networking, so I didn't implement any sort of parsing of messages or
--- proper HTTP responses so I just assume every request is a uri for a file.
 mainLoop :: Socket -> IO ()
 mainLoop socket =
   forever $ do
-    (conn, _) <- accept socket
-    filename <- recv conn 1024
-    print $ "Received request for file: " ++ filename
-    isfile <- doesFileExist filename
-    if isfile then
-      -- Send the file.
-      do file <- readFile filename
-         send conn file -- Assuming that all data gets sent here.
-         close conn
-    else
-      -- Error 404.
-      do send conn ("Error 404 Not Found\r\n")
-         close conn
+    putStr "Enter a Filename: "
+    filename <- getLine
+    send socket filename
+    response <- recv socket 1024
+    print response
 
 main :: IO ()
 main = do
-  print "Starting Server"
-  listen_socket <- socket AF_INET Stream defaultProtocol
-  bind listen_socket (SockAddrInet 2020 iNADDR_ANY)
-  listen listen_socket 2
-  print "Ready to Accept Connections"
-  mainLoop listen_socket
-  print "Server Shutting Down"
-  close listen_socket
+  print "Starting Client"
+  addr:_ <- getAddrInfo defaultHints (Just "127.0.0.1") (Just "2020")
+  sock <- socket AF_INET Stream defaultProtocol
+  connect sock (addrAddress addr)
+  print "Connected to Server"
+  mainLoop sock
+  print "Closing Client"
+  close sock

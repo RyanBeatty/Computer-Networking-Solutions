@@ -1,6 +1,7 @@
 module Main where
 
 import Control.Monad
+import Data.String.Utils
 import Network.Socket
 import System.Directory
 
@@ -13,7 +14,8 @@ mainLoop :: Socket -> IO ()
 mainLoop socket =
   forever $ do
     (conn, _) <- accept socket
-    filename <- recv conn 1024
+    message <- recv conn 1024
+    let filename = rstrip message
     print $ "Received request for file: " ++ filename
     isfile <- doesFileExist filename
     if isfile then
