@@ -26,6 +26,7 @@ executable ApplicationCh2-exe
   build-depends:       base
                      , ApplicationCh2
                      , network >= 2.6.3.2
+                     , directory >= 1.3.0.0
   default-language:    Haskell2010
 
 test-suite ApplicationCh2-test
