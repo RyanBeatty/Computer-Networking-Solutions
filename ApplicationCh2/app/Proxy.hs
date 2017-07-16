@@ -8,46 +8,6 @@ import System.Directory
 
 import Lib
 
----- Service incoming requests for files. I'm just trying to get a feel for
----- networking, so I didn't implement any sort of parsing of messages or
----- proper HTTP responses so I just assume every request is a uri for a file.
---mainLoop :: Socket -> IO ()
---mainLoop socket =
---  forever $ do
---    (conn, _) <- accept socket
---    message <- recv conn 1024
---    let filename = rstrip message
---    print $ "Received request for file: " ++ filename
---    isfile <- doesFileExist filename
---    if isfile then
---      -- Send the file.
---      do file <- readFile filename
---         send conn file -- Assuming that all data gets sent here.
---         close conn
---    else
---      -- Error 404.
---      do send conn ("Error 404 Not Found\r\n")
---         close conn
---
---worker :: Socket -> Socket -> IO ()
---worker sconn cconn
---  | 
---
---spawnChild :: Socket -> IO (ThreadId)
---spawnChild clientconn = do
---  serverconn <- connectTo "www.google.com" (PortNumber 80)
---  forkIO $ do
---    request <- recv clientconn 1024
---    send request
---  where worker = do
---    
---
---mainLoop :: Socket -> [ThreadId] -> IO ()
---mainLoop socket children = do
---  (conn, _) <- accept socket
---  child <- spawnChild conn
---  mainLoop socket (child:children)
-
 mainLoop :: Socket -> IO ()
 mainLoop sock = do
   (clientconn, _) <- accept sock
